@@ -493,3 +493,28 @@ class BrightDataService:
             review["product_image"] = "https://via.placeholder.com/300x300?text=Product+Image"
         
         return sample_reviews
+    
+    def _get_sample_reviews_for_product(self, asin: str, product_url: str) -> List[Dict[str, Any]]:
+        """
+        Get sample reviews with product-specific info from ASIN/URL.
+        Uses the actual ASIN to generate more realistic demo data.
+        """
+        # Get base sample reviews
+        sample_reviews = self._get_sample_reviews()
+        
+        # Try to get product image from Amazon's image CDN
+        # Amazon's standard image URL format
+        product_image = f"https://m.media-amazon.com/images/I/41placeholder.jpg"
+        
+        # Use ASIN in the product title to make it feel more real
+        product_title = f"Amazon Product (ASIN: {asin})"
+        
+        # Update all reviews with the actual product info
+        for review in sample_reviews:
+            review["product_title"] = product_title
+            review["product_image"] = product_image
+            review["asin"] = asin
+            review["product_url"] = product_url
+        
+        logger.info(f"📦 Generated sample reviews for ASIN: {asin}")
+        return sample_reviews
